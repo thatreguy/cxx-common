@@ -18,6 +18,9 @@ function Help
   echo "  --release"
   echo "     Build only release versions with triplet as detected in"
   echo "     this script"
+  echo "  --debug"
+  echo "     Build only debug versions with triplet as detected in"
+  echo "     this script"
   echo "  --asan"
   echo "     Build with ASAN triplet as detected in this script"
   echo "  --export-dir <DIR>"
@@ -28,6 +31,7 @@ function Help
 }
 
 RELEASE="false"
+DEBUG="false"
 ASAN="false"
 EXPORT_DIR=""
 VCPKG_ARGS=()
@@ -43,6 +47,10 @@ while [[ $# -gt 0 ]] ; do
       RELEASE="true"
       msg "Building Release-only binaries"
     ;;
+    --debug)
+      DEBUG="true"
+      msg "Building Debug-only binaries"
+    ;;
     --asan)
       ASAN="true"
       msg "Building ASAN binaries"
@@ -57,6 +65,11 @@ while [[ $# -gt 0 ]] ; do
   esac
   shift
 done
+
+if [[ ${RELEASE} == "true" ]] && [[ ${DEBUG} == "true" ]]; then
+  die "If you want release and debug builds, then don't specify either"
+fi
+
 msg "Passing extra args to 'vcpkg install':"
 msg " " "${VCPKG_ARGS[@]}"
 
@@ -130,7 +143,7 @@ elif [[ "${os}" = "Darwin" ]]; then
   msg "Detected Darwin OS"
   triplet_os="osx"
 else
-  die "Could not detect OS. OS detection required for release-only builds."
+  die "Could not detect OS. OS detection required for builds."
 fi
 
 triplet="${triplet_arch}-${triplet_os}"
@@ -139,6 +152,9 @@ triplet="${triplet_arch}-${triplet_os}"
 if [[ ${RELEASE} == "true" ]]; then
   msg "Only building release versions"
   triplet="${triplet}-rel"
+elif [[ ${DEBUG} == "true" ]]; then
+  msg "Only building Debug versions"
+  triplet="${triplet}-dbg"
 else
   msg "Building Release and Debug versions"
 fi
