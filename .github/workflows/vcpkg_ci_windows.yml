@@ -5,28 +5,36 @@ env:
   VCPKG_BINARY_SOURCES: 'clear;nuget,Source,readwrite'
   TRIPLET: 'x64-windows-static-md-rel'
 
+#on:
+#  release:
+#    types:
+#      - published
+#  pull_request:
+#    paths-ignore:
+#      - 'docker/**'
+#      - '.github/**'
+#      - '**.md'
+#      - 'old/**'
+#      - '!.github/workflows/vcpkg_ci_windows.yml'
+#  push:
+#    paths-ignore:
+#      - 'docker/**'
+#      - '.github/**'
+#      - '**.md'
+#      - 'old/**'
+#      - '!.github/workflows/vcpkg_ci_windows.yml'
+#    tags-ignore:
+#      - 'v*'
+#    branches:
+#      - 'master'
+
+# Controls when the workflow will run
 on:
-  release:
-    types:
-      - published
-  pull_request:
-    paths-ignore:
-      - 'docker/**'
-      - '.github/**'
-      - '**.md'
-      - 'old/**'
-      - '!.github/workflows/vcpkg_ci_windows.yml'
+  # Triggers the workflow on push or pull request events but only for the master branch
   push:
-    paths-ignore:
-      - 'docker/**'
-      - '.github/**'
-      - '**.md'
-      - 'old/**'
-      - '!.github/workflows/vcpkg_ci_windows.yml'
-    tags-ignore:
-      - 'v*'
-    branches:
-      - 'master'
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
 
 jobs:
   build:
