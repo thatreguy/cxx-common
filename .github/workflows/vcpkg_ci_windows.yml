@@ -194,6 +194,10 @@ jobs:
           # TODO Testing with CMake on Windows
           # cmake --build . --target test_dependencies
           # env CTEST_OUTPUT_ON_FAILURE=1 cmake --build . --target test || true
+      - uses: actions/upload-artifact@v2
+        with:
+          name: remill-artifact
+          path: install\bin\
 
       # TODO: remill only compilable with clang-cl, but not sure how force
       #   vcpkg to use it instead of msvc cl. Should probably be in portfile
@@ -279,6 +283,10 @@ jobs:
           & ( Get-ChildItem install\mcsema\bin | Where-Object {$_.name -match "mcsema-lift-.*.exe"} ) --version
           & ( Get-ChildItem install\mcsema\bin | Where-Object {$_.name -match "mcsema-lift-.*.exe"} ) --arch amd64 --os linux --cfg ..\tests\test_suite_generator\generated\prebuilt_cfg\amd64\linux\cfg\hello_world --output hello_world.bc
           & ( Get-ChildItem install\mcsema\bin | Where-Object {$_.name -match "mcsema-lift-.*.exe"} ) --arch x86 --os linux --cfg ..\tests\test_suite_generator\generated\prebuilt_cfg\x86\linux\cfg\hello_world --output hello_world.bc
+      - uses: actions/upload-artifact@v2
+        with:
+          name: mcsema-artifact
+          path: install\mcsema\bin\
 
       - name: Publish Release Assets
         if: |
